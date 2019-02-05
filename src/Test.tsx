@@ -7,6 +7,7 @@ import { BarComparator } from "./comparators/bars";
 import { CapComparator } from "./comparators/caps";
 import { CirclesComparator } from "./comparators/circles";
 import { PieComparator } from "./comparators/pie";
+import { StackComparator } from "./comparators/stacks";
 
 function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -28,6 +29,7 @@ const comparators: ReadonlyArray<Comparator> = [
     CapComparator,
     CirclesComparator,
     PieComparator,
+    StackComparator,
 ];
 
 interface TestProps {
