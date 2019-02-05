@@ -5,3 +5,16 @@
 .compareWrapper {
   height: 3em;
 }
+
+.table {
+  &__header {
+    text-align: left;
+  }
+
+  &__header,
+  &__cell {
+    &:not(:first-child) {
+      padding-left: .35em;
+    }
+  }
+}

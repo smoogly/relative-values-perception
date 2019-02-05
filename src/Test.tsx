@@ -103,7 +103,7 @@ class Test extends Component<TestProps, TestState> {
     }
 
     private _stats() {
-        const slice = 8;
+        const slice = 7;
         const remaining = Object.keys(this.state.stats)
             .map(k => slice - this.state.stats[k].length)
             .map(n => n > 0 ? n : 0)
@@ -117,12 +117,12 @@ class Test extends Component<TestProps, TestState> {
                 Average over last { slice * comparators.length } attempts.<br/>
                 Smaller values are better. Duration is in milliseconds.<br/>
             </p>
-            <table>
+            <table className={styles.table}>
                 <tbody>
                 <tr>
-                    <th>Type</th>
-                    <th>Accuracy</th>
-                    <th>Duration</th>
+                    <th className={ styles.table__header }>Type</th>
+                    <th className={ styles.table__header }>ms</th>
+                    <th className={ styles.table__header }>Mistake</th>
                 </tr>
                 { Object.keys(this.state.stats).map(k => {
                     const compStats = this.state.stats[k].slice(-slice);
@@ -138,9 +138,9 @@ class Test extends Component<TestProps, TestState> {
                     const duration = compStats.map(s => s.duration).reduce((tot, d) => d + tot, 0) / compStats.length;
 
                     return <tr key={ k }>
-                        <td>{ k }</td>
-                        <td>{ Math.round(accuracy * 100) / 100 }</td>
-                        <td>{ Math.round(duration * 100) / 100 }</td>
+                        <td className={ styles.table__cell }>{ k }</td>
+                        <td className={ styles.table__cell }>{ Math.round(duration * 100) / 100 }</td>
+                        <td className={ styles.table__cell }>{ Math.round(accuracy * 100) / 100 }</td>
                     </tr>;
                 }) }
                 </tbody>
