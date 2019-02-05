@@ -24,7 +24,7 @@ class App extends PureComponent<{}, AppState> {
 
     private _intro() {
         if (!this.state.demo) { return null; }
-        return <p>Ready to start? Click on an answer.</p>;
+        return <p>Click on an answer to start.</p>;
     }
 
     private _onChoice = () => {
