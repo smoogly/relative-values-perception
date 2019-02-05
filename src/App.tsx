@@ -1,28 +1,36 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from './App.module.scss';
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.tsx</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+import React, { PureComponent } from 'react';
+import Test from "./Test";
+
+interface AppState {
+    demo: boolean;
+}
+
+class App extends PureComponent<{}, AppState> {
+    constructor(props: {}) {
+        super(props);
+        this.state = { demo: true };
+    }
+
+    public render() {
+        return <div className={ styles.app }>
+            <p>Test accuracy and speed of comparing numbers using different comparison formats.</p>
+            <Test demo={ this.state.demo } onChoice={ this._onChoice }/>
+
+            { this._intro() }
+        </div>;
+    }
+
+    private _intro() {
+        if (!this.state.demo) { return null; }
+        return <p>Ready to start? Click on an answer.</p>;
+    }
+
+    private _onChoice = () => {
+        if (!this.state.demo) { return; }
+        this.setState({ demo: false });
+    }
 }
 
 export default App;
