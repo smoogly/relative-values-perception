@@ -1,13 +1,7 @@
 import styles from "./Test.module.scss";
 
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Comparator } from "./comparators/type";
-import { TextComparator } from "./comparators/text";
-import { BarComparator } from "./comparators/bars";
-import { CapComparator } from "./comparators/caps";
-import { CirclesComparator } from "./comparators/circles";
-import { PieComparator } from "./comparators/pie";
-import { StackComparator } from "./comparators/stacks";
 
 function getRandomInt(min: number, max: number) {
     min = Math.ceil(min);
@@ -23,16 +17,8 @@ const generateNumbers = () => {
     return [a, b];
 };
 
-const comparators: ReadonlyArray<Comparator> = [
-    TextComparator,
-    BarComparator,
-    CapComparator,
-    CirclesComparator,
-    PieComparator,
-    StackComparator,
-];
-
 interface TestProps {
+    comparators: ReadonlyArray<Comparator>;
     demo?: boolean;
     onChoice?: () => void;
 }
@@ -44,7 +30,12 @@ interface TestState {
     stats: { [comparator: string]: ReadonlyArray<{ accuracy: number, duration: number }> };
 }
 
-class Test extends Component<TestProps, TestState> {
+const comparatorStats = (comparators: TestProps["comparators"]) => comparators.reduce((agg, c) => {
+    agg[c.label] = [];
+    return agg;
+}, {} as TestState["stats"]);
+
+class Test extends PureComponent<TestProps, TestState> {
     constructor(props: TestProps) {
         super(props);
 
@@ -52,16 +43,19 @@ class Test extends Component<TestProps, TestState> {
         this.state = {
             a, b,
             ts: Date.now(),
-            stats: comparators.reduce((agg, c) => {
-                agg[c.label] = [];
-                return agg;
-            }, {} as TestState["stats"])
+            stats: comparatorStats(props.comparators)
         };
+    }
+
+    public componentWillReceiveProps(nextProps: Readonly<TestProps>): void {
+        if (this.props.comparators !== nextProps.comparators) {
+            this.setState({ stats: comparatorStats(nextProps.comparators) });
+        }
     }
 
     private _selectComparator(): Comparator {
         const nAnswers = Object.keys(this.state.stats).reduce((tot, k) => tot + this.state.stats[k].length, 0);
-        return comparators[nAnswers % comparators.length];
+        return this.props.comparators[nAnswers % this.props.comparators.length];
     }
 
     private _handleAnswer = (answer: number) => {
@@ -118,7 +112,7 @@ class Test extends Component<TestProps, TestState> {
 
         return <div>
             <p>
-                Average over last { slice * comparators.length } attempts.<br/>
+                Average over last { slice * this.props.comparators.length } attempts.<br/>
                 Smaller values are better. Duration is in milliseconds.<br/>
             </p>
             <table className={styles.table}>

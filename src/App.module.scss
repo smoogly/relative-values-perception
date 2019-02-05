@@ -1,3 +1,15 @@
 .app {
   padding: 4em 2em;
 }
+
+.comparator {
+  margin-bottom: 1em;
+
+  &__label {
+    display: inline-block;
+  }
+
+  &__thumbnail {
+    margin-left: 1em;
+  }
+}
